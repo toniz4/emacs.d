@@ -15,6 +15,11 @@ It's pretty basic.
 #+end_src
 ** Looks
 *** Fonts
+#+begin_src emacs-lisp
+  (setq line-spacing 0)
+  (set-frame-font "Dina:pixelsize=10" nil t)
+  (add-to-list 'default-frame-alist '(font . "Dina:pixelsize=10"))
+#+end_src
 *** Theme :TODO
 *** Misc
 #+begin_src emacs-lisp
