@@ -1,20 +1,90 @@
-* My Emacs Configuration 
-  It's pretty basic.
+* My Emacs configuration
+It's pretty basic.
 ** Remove Anoying things
-   #+begin_src emacs-lisp
-     ;; Startup file
-	 (setq inhibit-startup-message t)
-	 ;; Menus
-	 (scroll-bar-mode -1)
-	 (tool-bar-mode -1)
-	 (menu-bar-mode -1)
-	 ;; Cursor
-	 (blink-cursor-mode 0)
-   #+end_src
+#+begin_src emacs-lisp
+  ;; Startup file
+  (setq inhibit-startup-message t)
+  ;; Menus
+  (scroll-bar-mode -1)
+  (tool-bar-mode -1)
+  (menu-bar-mode -1)
+  ;; Cursor
+  (blink-cursor-mode 0)
+  ;; Change backup dir
+  (setq backup-directory-alist '(("." . "~/.cache/emacs")))
+#+end_src
 ** Looks
 *** Fonts
-	#+begin_src emacs-lisp
-	  (setq line-spacing 0)
-	  (set-frame-font "Dina:pixelsize=10" nil t)
-	  (add-to-list 'default-frame-alist '(font . "Dina:pixelsize=10"))
-	#+end_src
+*** Theme :TODO
+*** Misc
+#+begin_src emacs-lisp
+  ;; Relative line numbers
+  (global-display-line-numbers-mode)
+  (setq display-line-numbers-type 'relative)
+  ;; Org config
+  (require 'org-tempo)
+  ;; Tabsize
+  (setq-default tab-width 4)
+#+end_src
+** Packages
+*** Wich-key
+#+begin_src emacs-lisp
+  (use-package which-key
+    :ensure t
+    :config (which-key-mode))
+#+end_src
+*** auto-complete
+#+begin_src emacs-lisp
+  (use-package auto-complete
+    :ensure t
+    :init
+    (progn
+      (ac-config-default)
+      (global-auto-complete-mode t)))
+#+end_src
+*** ace-window
+#+begin_src emacs-lisp
+  (use-package ace-window
+    :ensure t
+    :bind (("C-x o" . ace-window)))
+#+end_src
+*** acme-theme
+#+begin_src emacs-lisp
+  (use-package acme-theme
+    :ensure t
+    :config (load-theme 'acme t))
+#+end_src
+*** flycheck
+#+begin_src emacs-lisp
+  (use-package flycheck
+    :ensure t
+    :init (global-flycheck-mode))
+#+end_src
+*** haskell-mode
+#+begin_src emacs-lisp
+  (use-package haskell-mode
+    :ensure t)
+#+end_src
+*** ivy
+#+begin_src emacs-lisp
+  (use-package ivy
+    :ensure t
+    :config
+    (progn
+      (ivy-mode 1)
+      (setq ivy-use-virtual-buffers t)
+      (setq enable-recursive-minibuffers t)
+      (setq ivy-re-builders-alist
+            '((t . ivy--regex-fuzzy)))))
+#+end_src
+*** swiper
+#+begin_src emacs-lisp
+  (use-package swiper
+    :ensure t
+    :bind ("C-s" . 'swiper))
+#+end_src
+*** rainbow-mode
+#+begin_src emacs-lisp
+  (use-package rainbow-mode
+    :ensure t)
+#+end_src
