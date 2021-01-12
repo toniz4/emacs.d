@@ -1,0 +1,20 @@
+* My Emacs Configuration 
+  It's pretty basic.
+** Remove Anoying things
+   #+begin_src emacs-lisp
+     ;; Startup file
+	 (setq inhibit-startup-message t)
+	 ;; Menus
+	 (scroll-bar-mode -1)
+	 (tool-bar-mode -1)
+	 (menu-bar-mode -1)
+	 ;; Cursor
+	 (blink-cursor-mode 0)
+   #+end_src
+** Looks
+*** Fonts
+	#+begin_src emacs-lisp
+	  (setq line-spacing 0)
+	  (set-frame-font "Dina:pixelsize=10" nil t)
+	  (add-to-list 'default-frame-alist '(font . "Dina:pixelsize=10"))
+	#+end_src
