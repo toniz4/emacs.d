@@ -16,9 +16,12 @@ It's pretty basic.
 ** Looks
 *** Fonts
 #+begin_src emacs-lisp
-  (setq line-spacing 0)
-  (set-frame-font "Dina:pixelsize=10" nil t)
-  (add-to-list 'default-frame-alist '(font . "Dina:pixelsize=10"))
+  ;; Maybe one of those it's the right way to use a font
+  (set-frame-font "qsqs:pixelsize=12" nil t)
+  (add-to-list 'default-frame-alist '(font . "qsqs:pixelsize=12"))
+  (set-face-attribute 'default nil :family "qsqs:pixelsize=12")
+  (global-prettify-symbols-mode 1)
+
 #+end_src
 *** Theme :TODO
 *** Misc
@@ -26,27 +29,17 @@ It's pretty basic.
   ;; Relative line numbers
   (global-display-line-numbers-mode)
   (setq display-line-numbers-type 'relative)
-  ;; Org config
-  (require 'org-tempo)
   ;; Tabsize
   (setq-default tab-width 4)
 #+end_src
+** General configs
+*** Org-mode 
+#+begin_src emacs-lisp
+  (require 'org-tempo)
+  (setq tempo-interactive t)
+  (add-hook 'org-mode-hook 'org-indent-mode)
+#+end_src
 ** Packages
-*** Wich-key
-#+begin_src emacs-lisp
-  (use-package which-key
-    :ensure t
-    :config (which-key-mode))
-#+end_src
-*** auto-complete
-#+begin_src emacs-lisp
-  (use-package auto-complete
-    :ensure t
-    :init
-    (progn
-      (ac-config-default)
-      (global-auto-complete-mode t)))
-#+end_src
 *** ace-window
 #+begin_src emacs-lisp
   (use-package ace-window
@@ -59,6 +52,15 @@ It's pretty basic.
     :ensure t
     :config (load-theme 'acme t))
 #+end_src
+*** auto-complete
+#+begin_src emacs-lisp
+  (use-package auto-complete
+    :ensure t
+    :init
+    (progn
+      (ac-config-default)
+      (global-auto-complete-mode t)))
+#+end_src
 *** flycheck
 #+begin_src emacs-lisp
   (use-package flycheck
@@ -68,7 +70,14 @@ It's pretty basic.
 *** haskell-mode
 #+begin_src emacs-lisp
   (use-package haskell-mode
-    :ensure t)
+    :ensure t
+    :config
+    (progn 
+      (add-hook 'haskell-mode-hook (lambda ()
+                                     (haskell-indent-mode)
+                                     (haskell-indentation-mode)
+                                     (interactive-haskell-mode))
+                (setq haskell-interactive-popup-errors nil))))
 #+end_src
 *** ivy
 #+begin_src emacs-lisp
@@ -82,14 +91,22 @@ It's pretty basic.
       (setq ivy-re-builders-alist
             '((t . ivy--regex-fuzzy)))))
 #+end_src
+*** rainbow-mode
+#+begin_src emacs-lisp
+  (use-package rainbow-mode
+    :ensure t)
+#+end_src
 *** swiper
 #+begin_src emacs-lisp
   (use-package swiper
     :ensure t
     :bind ("C-s" . 'swiper))
 #+end_src
-*** rainbow-mode
+*** Wich-key
 #+begin_src emacs-lisp
-  (use-package rainbow-mode
-    :ensure t)
+  (use-package which-key
+    :ensure t
+    :config (which-key-mode))
 #+end_src
+
+
