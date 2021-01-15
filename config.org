@@ -12,6 +12,8 @@ It's pretty basic.
   (blink-cursor-mode 0)
   ;; Change backup dir
   (setq backup-directory-alist '(("." . "~/.cache/emacs")))
+  ;; alisas to yes or no
+  (defalias 'yes-or-no-p 'y-or-n-p)
 #+end_src
 ** Looks
 *** Fonts
@@ -53,6 +55,11 @@ TODO: Customize modeline
   (setq ido-everywhere t)
   (setq ido-enable-flex-matching t)
 #+end_src
+*** Buffers
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-x C-b") 'ibuffer)
+  (global-set-key (kbd "C-x b") 'ido-switch-buffer)
+#+end_src
 ** Packages
 *** ace-window
 #+begin_src emacs-lisp
@@ -87,6 +94,12 @@ TODO: Customize modeline
     :ensure t
     :init (global-flycheck-mode))
 #+end_src
+*** flycheck haskell
+#+begin_src emacs-lisp
+  (use-package flycheck-haskell
+    :ensure t
+    :config(add-hook 'haskell-mode-hook #'flycheck-haskell-setup))
+#+end_src
 *** haskell-mode
 #+begin_src emacs-lisp
   (use-package haskell-mode
@@ -96,25 +109,38 @@ TODO: Customize modeline
       (add-hook 'haskell-mode-hook (lambda ()
                                      (haskell-indent-mode)
                                      (haskell-indentation-mode)
-                                     (interactive-haskell-mode))
-                (setq haskell-interactive-popup-errors nil))))
+                                     (interactive-haskell-mode)
+                                     (setq haskell-interactive-popup-errors nil)))))
 #+end_src
-*** ivy
-#+begin_src emacs-lisp
+
   (use-package ivy
     :ensure t
     :config
     (progn
       (ivy-mode -1)
       (setq ivy-use-virtual-buffers t)
-      (setq enable-recursive-minibuffers t)
-      (setq ivy-re-builders-alist
-            '((t . ivy--regex-fuzzy)))))
+      (setq enable-r
+*** ido-vertical-mode
+#+begin_src emacs-lisp
+  (use-package ido-vertical-mode
+    :ensure t
+    :init
+    (progn
+      (require 'ido-vertical-mode)
+      (ido-vertical-mode 1)
+      (setq ido-vertical-define-keys 'C-n-and-C-p-only)))
 #+end_src
 *** rainbow-mode
 #+begin_src emacs-lisp
   (use-package rainbow-mode
     :ensure t)
+#+end_src
+*** smex
+#+begin_src emacs-lisp
+  (use-package smex
+    :ensure t
+    :init (smex-initialize)
+    :bind ("M-x" . smex))
 #+end_src
 *** swiper
 #+begin_src emacs-lisp
@@ -128,6 +154,4 @@ TODO: Customize modeline
     :ensure t
     :config (which-key-mode))
 #+end_src
-
-
 
