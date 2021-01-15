@@ -15,15 +15,16 @@ It's pretty basic.
 #+end_src
 ** Looks
 *** Fonts
+- Pragmata pro could be a nice font, if i get tired of bitmap fonts.
 #+begin_src emacs-lisp
   ;; Maybe one of those it's the right way to use a font
-  (set-frame-font "qsqs:pixelsize=12" nil t)
-  (add-to-list 'default-frame-alist '(font . "qsqs:pixelsize=12"))
-  (set-face-attribute 'default nil :family "qsqs:pixelsize=12")
+  (set-frame-font "lfont:pixelsize=12" nil t)
+  (add-to-list 'default-frame-alist '(font . "lfont:pixelsize=12"))
+  (set-face-attribute 'default nil :family "lfont:pixelsize=12")
   (global-prettify-symbols-mode 1)
-
 #+end_src
-*** Theme :TODO
+*** Modeline
+TODO: Customize modeline
 *** Misc
 #+begin_src emacs-lisp
   ;; Relative line numbers
@@ -33,11 +34,24 @@ It's pretty basic.
   (setq-default tab-width 4)
 #+end_src
 ** General configs
-*** Org-mode 
+*** Scroll
+- Don't center cursor when reaching bottom of the screen
 #+begin_src emacs-lisp
-  (require 'org-tempo)
-  (setq tempo-interactive t)
-  (add-hook 'org-mode-hook 'org-indent-mode)
+  (setq scroll-conservatively 100)
+#+end_src
+*** Org-mode 
+- Initialize org-indent-mode in org-mode, and activate org-tempo for abreviations
+#+begin_src emacs-lisp
+  (add-hook 'org-mode-hook (lambda ()
+                             (org-indent-mode)
+                             (require 'org-tempo)
+                             (setq tempo-interactive t)))
+#+end_src
+*** ido-mode
+#+begin_src emacs-lisp
+  (ido-mode 1)
+  (setq ido-everywhere t)
+  (setq ido-enable-flex-matching t)
 #+end_src
 ** Packages
 *** ace-window
@@ -59,7 +73,13 @@ It's pretty basic.
     :init
     (progn
       (ac-config-default)
-      (global-auto-complete-mode t)))
+      (global-auto-complete-mode -1)))
+#+end_src
+*** beacon
+#+begin_src emacs-lisp
+  (use-package beacon
+    :ensure t
+    :config (beacon-mode 1))
 #+end_src
 *** flycheck
 #+begin_src emacs-lisp
@@ -85,7 +105,7 @@ It's pretty basic.
     :ensure t
     :config
     (progn
-      (ivy-mode 1)
+      (ivy-mode -1)
       (setq ivy-use-virtual-buffers t)
       (setq enable-recursive-minibuffers t)
       (setq ivy-re-builders-alist
@@ -108,5 +128,6 @@ It's pretty basic.
     :ensure t
     :config (which-key-mode))
 #+end_src
+
 
 
