@@ -24,7 +24,7 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(package-selected-packages
-   '(flycheck-haskell smex ido-vertical-mode sh-mode beacon which-key use-package telega swiper rainbow-mode haskell-mode flycheck auto-complete acme-theme ace-window)))
+   '(dashboard flycheck-haskell smex ido-vertical-mode sh-mode beacon which-key use-package telega swiper rainbow-mode haskell-mode flycheck auto-complete acme-theme ace-window)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

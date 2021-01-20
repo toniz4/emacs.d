@@ -5,15 +5,18 @@ It's pretty basic.
   ;; Startup file
   (setq inhibit-startup-message t)
   ;; Menus
-  (scroll-bar-mode -1)
   (tool-bar-mode -1)
   (menu-bar-mode -1)
+  (scroll-bar-mode -1)
   ;; Cursor
   (blink-cursor-mode 0)
   ;; Change backup dir
   (setq backup-directory-alist '(("." . "~/.cache/emacs")))
   ;; alisas to yes or no
-  (defalias 'yes-or-no-p 'y-or-n-p)
+  (defalias 'yes-or-no-p 'nalksdjfasldkjflsakdjflksajdfalsdkjfladsjflsadkjflakdsdskjy-or-n-p)
+  ;; Remove wrap icons
+  (fringe-mode '(nil . 0 ))
+  (set-display-table-slot standard-display-table 'wrap ?\ )
 #+end_src
 ** Looks
 *** Fonts
@@ -32,6 +35,9 @@ TODO: Customize modeline
   ;; Relative line numbers
   (global-display-line-numbers-mode)
   (setq display-line-numbers-type 'relative)
+  ;; Commumn and line numbers
+  (line-number-mode 1)
+  (column-number-mode 1)
   ;; Tabsize
   (setq-default tab-width 4)
 #+end_src
@@ -47,7 +53,8 @@ TODO: Customize modeline
   (add-hook 'org-mode-hook (lambda ()
                              (org-indent-mode)
                              (require 'org-tempo)
-                             (setq tempo-interactive t)))
+                             (setq tempo-interactive t)
+                             (setq org-src-window-setup 'current-window)))
 #+end_src
 *** ido-mode
 #+begin_src emacs-lisp
@@ -59,6 +66,17 @@ TODO: Customize modeline
 #+begin_src emacs-lisp
   (global-set-key (kbd "C-x C-b") 'ibuffer)
   (global-set-key (kbd "C-x b") 'ido-switch-buffer)
+  (setq ibuffer-expert t)
+#+end_src
+*** Pairs
+#+begin_src emacs-lisp
+  (setq electric-pair-pairs '(
+                             (?\( . ?\))
+                             (?\[ . ?\])
+                             (?\{ . ?\})
+                             ))
+  (electric-pair-mode t)
+  (show-paren-mode t)
 #+end_src
 ** Packages
 *** ace-window
@@ -73,20 +91,27 @@ TODO: Customize modeline
     :ensure t
     :config (load-theme 'acme t))
 #+end_src
-*** auto-complete
-#+begin_src emacs-lisp
-  (use-package auto-complete
-    :ensure t
-    :init
-    (progn
-      (ac-config-default)
-      (global-auto-complete-mode -1)))
-#+end_src
 *** beacon
 #+begin_src emacs-lisp
   (use-package beacon
     :ensure t
     :config (beacon-mode 1))
+#+end_src
+*** company
+#+begin_src emacs-lisp
+  (use-package company
+    :ensure t
+    :init
+    (add-hook 'after-init-hook 'global-company-mode))
+#+end_src
+*** dashboard
+#+begin_src emacs-lisp
+  (use-package dashboard
+    :ensure t
+    :config
+    (dashboard-setup-startup-hook)
+    (setq dashboard-itens '((recents . 10)))
+    (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))))
 #+end_src
 *** flycheck
 #+begin_src emacs-lisp
@@ -112,14 +137,6 @@ TODO: Customize modeline
                                      (interactive-haskell-mode)
                                      (setq haskell-interactive-popup-errors nil)))))
 #+end_src
-
-  (use-package ivy
-    :ensure t
-    :config
-    (progn
-      (ivy-mode -1)
-      (setq ivy-use-virtual-buffers t)
-      (setq enable-r
 *** ido-vertical-mode
 #+begin_src emacs-lisp
   (use-package ido-vertical-mode
@@ -154,4 +171,3 @@ TODO: Customize modeline
     :ensure t
     :config (which-key-mode))
 #+end_src
-
