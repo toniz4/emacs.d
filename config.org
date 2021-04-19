@@ -5,15 +5,15 @@ It's pretty basic.
   ;; Startup file
   (setq inhibit-startup-message t)
   ;; Menus
+  (scroll-bar-mode -1)
   (tool-bar-mode -1)
   (menu-bar-mode -1)
-  (scroll-bar-mode -1)
   ;; Cursor
   (blink-cursor-mode 0)
   ;; Change backup dir
   (setq backup-directory-alist '(("." . "~/.cache/emacs")))
   ;; alisas to yes or no
-  (defalias 'yes-or-no-p 'nalksdjfasldkjflsakdjflksajdfalsdkjfladsjflsadkjflakdsdskjy-or-n-p)
+  (defalias 'yes-or-no-p 'y-or-n-p)
   ;; Remove wrap icons
   (fringe-mode '(nil . 0 ))
   (set-display-table-slot standard-display-table 'wrap ?\ )
@@ -23,9 +23,9 @@ It's pretty basic.
 - Pragmata pro could be a nice font, if i get tired of bitmap fonts.
 #+begin_src emacs-lisp
   ;; Maybe one of those it's the right way to use a font
-  (set-frame-font "lfont:pixelsize=12" nil t)
-  (add-to-list 'default-frame-alist '(font . "lfont:pixelsize=12"))
-  (set-face-attribute 'default nil :family "lfont:pixelsize=12")
+  (set-frame-font "qsqs" nil t)
+  (add-to-list 'default-frame-alist '(font . "qsqs"))
+  (set-face-attribute 'default nil :family "qsqs")
   (global-prettify-symbols-mode 1)
 #+end_src
 *** Modeline
@@ -33,19 +33,24 @@ TODO: Customize modeline
 *** Misc
 #+begin_src emacs-lisp
   ;; Relative line numbers
-  (global-display-line-numbers-mode)
-  (setq display-line-numbers-type 'relative)
+;;  (setq display-line-numbers-type 'visual)
+ ;; (setq display-line-numbers-grow-only t)
+
   ;; Commumn and line numbers
-  (line-number-mode 1)
+  (global-display-line-numbers-mode 1)
   (column-number-mode 1)
   ;; Tabsize
   (setq-default tab-width 4)
 #+end_src
 ** General configs
+*** Misc
+#+begin_src emacs-lisp
+  (save-place-mode t)
+#+end_src
 *** Scroll
 - Don't center cursor when reaching bottom of the screen
 #+begin_src emacs-lisp
-  (setq scroll-conservatively 100)
+  (setq scroll-conservatively 0)
 #+end_src
 *** Org-mode 
 - Initialize org-indent-mode in org-mode, and activate org-tempo for abreviations
@@ -88,14 +93,7 @@ TODO: Customize modeline
 *** acme-theme
 #+begin_src emacs-lisp
   (use-package acme-theme
-    :ensure t
-    :config (load-theme 'acme t))
-#+end_src
-*** beacon
-#+begin_src emacs-lisp
-  (use-package beacon
-    :ensure t
-    :config (beacon-mode 1))
+    :ensure t)
 #+end_src
 *** company
 #+begin_src emacs-lisp
@@ -103,6 +101,28 @@ TODO: Customize modeline
     :ensure t
     :init
     (add-hook 'after-init-hook 'global-company-mode))
+
+  (eval-after-load 'company
+    '(progn
+       (define-key company-active-map (kbd "TAB") 'company-complete-common-or-cycle)
+       (define-key company-active-map (kbd "<tab>") 'company-complete-common-or-cycle)))
+
+  (eval-after-load 'company
+    '(progn
+       (define-key company-active-map (kbd "S-TAB") 'company-select-previous)
+       (define-key company-active-map (kbd "<backtab>") 'company-select-previous)))
+#+end_src
+*** company-ghci
+#+begin_src emacs-lisp
+  (use-package company-ghci
+    :ensure t
+    :config)
+
+  (require 'company-ghci)
+  (push 'company-ghci company-backends)
+  (add-hook 'haskell-mode-hook 'company-mode)
+  ;;; To get completions in the REPL
+  (add-hook 'haskell-interactive-mode-hook 'company-mode)
 #+end_src
 *** dashboard
 #+begin_src emacs-lisp
@@ -112,6 +132,29 @@ TODO: Customize modeline
     (dashboard-setup-startup-hook)
     (setq dashboard-itens '((recents . 10)))
     (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*"))))
+#+end_src
+*** evil
+#+begin_src emacs-lisp 
+  (use-package evil
+    :ensure t
+    :config
+    (evil-mode -1)
+    (evil-define-key 'normal haskell-mode-map "o" 'haskell-evil-open-below
+                                              "O" 'haskell-evil-open-above))
+
+  ;; Fix haskell identation when using o and O, before it idented a empty line
+  (defun haskell-evil-open-above ()
+    (interactive)
+    (evil-digit-argument-or-evil-beginning-of-line)
+    (haskell-indentation-newline-and-indent)
+    (evil-previous-line)
+    (haskell-indentation-indent-line)
+    (evil-append-line nil))
+
+  (defun haskell-evil-open-below ()
+    (interactive)
+    (evil-append-line nil)
+    (haskell-indentation-newline-and-indent))
 #+end_src
 *** flycheck
 #+begin_src emacs-lisp
@@ -132,7 +175,6 @@ TODO: Customize modeline
     :config
     (progn 
       (add-hook 'haskell-mode-hook (lambda ()
-                                     (haskell-indent-mode)
                                      (haskell-indentation-mode)
                                      (interactive-haskell-mode)
                                      (setq haskell-interactive-popup-errors nil)))))
@@ -152,12 +194,19 @@ TODO: Customize modeline
   (use-package rainbow-mode
     :ensure t)
 #+end_src
+*** parchment
+#+begin_src emacs-lisp
+  (use-package parchment-theme
+    :ensure t
+    :config (load-theme 'parchment t))
+#+end_src
 *** smex
 #+begin_src emacs-lisp
   (use-package smex
     :ensure t
     :init (smex-initialize)
-    :bind ("M-x" . smex))
+    :bind
+    ("M-x" . smex))
 #+end_src
 *** swiper
 #+begin_src emacs-lisp
